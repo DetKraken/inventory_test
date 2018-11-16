@@ -9,13 +9,13 @@ function love.load()
 	player = player_controller:init(200,200)
 	level = level_controller:init(10,10,Tile:new("grass"))
 	objectArr = {}
-	--table.insert(objectArr,Weapon:new(100,300,"pistol"))
+	table.insert(objectArr,Weapon:new(100,300,"pistol"))
 end
 
 function love.update(dt)
 	mX, mY = love.mouse.getPosition()
-	level_controller:edit(mX,mY,level)
-	--player_controller:update(player,dt, objectArr)
+	level_controller:edit(mX,mY,level,Tile.tileArr)
+	player_controller:update(player,dt,objectArr,level,mX,mY)
 end
 
 function love.draw()

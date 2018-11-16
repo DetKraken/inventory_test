@@ -2,7 +2,7 @@ local Tile = {}
 local TileMT = {__index = class}
 
 
-local tileArr = {
+Tile.tileArr = {
 	grass = {
 		id = 1,
 		sprite = love.graphics.newImage('src/tiles/grass.png'),
@@ -18,9 +18,9 @@ local tileArr = {
 function Tile:new(tileType)
 	local cache = {}
 	setmetatable(cache, TileMT)
-	cache.id = tileArr[tileType].id
-	cache.sprite = tileArr[tileType].sprite
-	cache.collision = tileArr[tileType].collision
+	cache.id = Tile.tileArr[tileType].id
+	cache.sprite = Tile.tileArr[tileType].sprite
+	cache.collision = Tile.tileArr[tileType].collision
 	cache.highlight = false
 	return cache
 end
