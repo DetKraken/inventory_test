@@ -45,6 +45,8 @@ function Weapon:new(x,y,weapon)
 	setmetatable(cache, WeaponMT)
 	cache.x = x
 	cache.y = y
+	cache.xVel = 0
+	cache.yVel = 0
 	cache.w = 5
 	cache.h = 27
 	cache.name = weaponArr[weapon].name
@@ -52,10 +54,6 @@ function Weapon:new(x,y,weapon)
 	cache.magazine = magArr[weapon].size
 	cache.shellType = shellArr[magArr[weapon].typeOf]
 	return cache
-end
-
-function Weapon:fire()
-	print(self.typeOf)
 end
 
 return Weapon

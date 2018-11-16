@@ -1,20 +1,25 @@
 Weapon = require 'src/weapons'
+Tile = require 'src/tiles'
+
 require('src/player')
 require('src/essentials')
+require('src/level')
 
 function love.load()
 	player = player_controller:init(200,200)
+	level = level_controller:init(10,10,Tile:new("grass"))
 	objectArr = {}
-	table.insert(objectArr,Weapon:new(100,300,"pistol"))
-	table.insert(objectArr,Weapon:new(100,100,"pistol"))
-	table.insert(objectArr,Weapon:new(100,500,"pistol"))
+	--table.insert(objectArr,Weapon:new(100,300,"pistol"))
 end
 
 function love.update(dt)
-	player_controller:update(player,dt, objectArr)
+	mX, mY = love.mouse.getPosition()
+	level_controller:edit(mX,mY,level)
+	--player_controller:update(player,dt, objectArr)
 end
 
 function love.draw()
+	level_controller:draw(level)
 	for _,v in pairs(objectArr) do
 		love.graphics.draw(v.sprite, v.x, v.y)
 	end
