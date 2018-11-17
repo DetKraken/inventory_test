@@ -28,6 +28,23 @@ function level_controller:edit(mX,mY,level,tiles)
 	end
 end
 
+function level_controller:save(level)
+	print(love.filesystem.getAppdataDirectory( ))
+	if love.filesystem.getInfo("C:/Users/Kraken/AppData/Roaming/Love/Vidya_gaem") then
+		print("yep")
+	else
+		love.filesystem.createDirectory("C:/Users/Kraken/AppData/Roaming/Love/Vidya_gaem")
+		print("nope")
+
+	end
+
+
+
+
+
+
+end
+
 function level_controller:draw(level)
 	for _,v in pairs(level) do
 		if v.sprite ~= nil then
@@ -43,6 +60,7 @@ function tileReplace(x,y,level,tile)
 	for _,v in pairs(level) do
 		if checkCollision(v.x,v.y,32,32,x,y,1,1) then
 			print("replacing tile at "..x.."/"..y)
+			--fix
 			v.sprite = Tile.tileArr["wall"].sprite
 			v.collision = Tile.tileArr["wall"].collision
 		end

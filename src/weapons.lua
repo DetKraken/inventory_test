@@ -2,33 +2,45 @@ local Weapon = {}
 local WeaponMT = {__index = class}
 
 local weaponArr = {
-	pistol = {
+	revolver = {
 		id = 1,
 		sprite = love.graphics.newImage('src/weapons/revolver.png'),
 		w = 5,
 		h = 27,
-		name = "Glack 18"
+		name = "Smath & Wassan .357"
 	},
 	smg = {
 		id = 2
+	},
+	shotgun = {
+		id = 3,
+		sprite = love.graphics.newImage('src/weapons/shotgun.png'),
+		w = 10,
+		h = 10,
+		name = "Banelli 12 gauge"
 	}
 }
 
 local magArr = {
-	pistol = {
+	revolver = {
 		id = 1,
 		size = 15,
-		typeOf = "nineMm"
+		typeOf = "threeFiveSeven"
 	},
 	smg = {
 		id = 2,
 		size = 31,
 		typeOf = "acp"
+	},
+	shotgun = {
+		id = 3,
+		size = 8,
+		typeOf = "buckshot"
 	}
 }
 
 local shellArr = {
-	nineMm = {
+	threeFiveSeven = {
 		id = 1,
 		mass = 7,
 		velocity = 200
@@ -37,6 +49,11 @@ local shellArr = {
 		id = 1,
 		mass = 6,
 		velocity = 180
+	},
+	buckshot = {
+		id = 3,
+		mass = 1,
+		velocity = 200
 	}
 }
 
