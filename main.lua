@@ -7,11 +7,11 @@ require('src/level')
 
 function love.load()
 	player = player_controller:init(200,200)
-	level = level_controller:init(10,10,Tile:new("grass"))
+	--level = level_controller:init(10,10,Tile:new("grass"))
+	level = level_controller:load("level 1.txt")
 	objectArr = {}
 	table.insert(objectArr,Weapon:new(100,300,"shotgun"))
 	table.insert(objectArr,Weapon:new(300,100,"revolver"))
-	level_controller:save(level)
 end
 
 function love.update(dt)
