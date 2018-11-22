@@ -5,8 +5,13 @@ local starter = "("
 local closer = ")"
 local separator = ","
 local tileArr = {}
-tileArr[1] = "grass"
+tileArr[1] = "floor"
 tileArr[2] = "wall"
+tileArr[3] = "wall_north"
+tileArr[4] = "wall_east"
+tileArr[5] = "wall_south"
+tileArr[6] = "wall_west"
+tileSelect = 1
 
 function level_controller:init(w,h,tile)
 	local cache = {}
@@ -68,8 +73,8 @@ function level_controller:load(level)
 		--print("entry # "..loopCount..": "..val)
 		if loopCount == 3 then
 			loopCount = 0
-			--print("tile ID : "..loopCache[1].." Tile X : "..loopCache[2].." Tile Y : "..loopCache[3])
-			table.insert(cache,tileCreate(loopCache[2],loopCache[3],tileCreate(x,y,Tile:new(tileArr[loopCache[1]]))))
+			print("tile ID : "..loopCache[1].." Tile X : "..loopCache[2].." Tile Y : "..loopCache[3])
+			table.insert(cache,tileCreate(loopCache[2],loopCache[3],loopCache[1]))
 		end
 	end
 	return cache
@@ -89,11 +94,14 @@ end
 function tileReplace(x,y,level,tile)
 	for _,v in pairs(level) do
 		if checkCollision(v.x,v.y,32,32,x,y,1,1) then
-			print("replacing tile at "..x.."/"..y)
 			--fix
-			v.id = Tile.tileArr["wall"].id
-			v.sprite = Tile.tileArr["wall"].sprite
-			v.collision = Tile.tileArr["wall"].collision
+			v.id = Tile.tileArr[tileArr[tileSelect]].id
+			v.sprite = Tile.tileArr[tileArr[tileSelect]].sprite
+			v.collision = Tile.tileArr[tileArr[tileSelect]].collision
+			v.w = Tile.tileArr[tileArr[tileSelect]].w
+			v.h = Tile.tileArr[tileArr[tileSelect]].h
+			v.xOffset = Tile.tileArr[tileArr[tileSelect]].xOffset
+			v.yOffset = Tile.tileArr[tileArr[tileSelect]].yOffset
 		end
 	end
 end
@@ -101,9 +109,13 @@ end
 
 function tileCreate(x,y,tileType)
 	local cache = {}
-	cache.id = tileType.id
-	cache.sprite = tileType.sprite
-	cache.collision = tileType.collision
+	cache.id = Tile.tileArr[tileArr[tileType]].id
+	cache.sprite = Tile.tileArr[tileArr[tileType]].sprite
+	cache.collision = Tile.tileArr[tileArr[tileType]].collision
+	cache.w = Tile.tileArr[tileArr[tileType]].w
+	cache.h = Tile.tileArr[tileArr[tileType]].h
+	cache.xOffset = Tile.tileArr[tileArr[tileType]].xOffset
+	cache.yOffset = Tile.tileArr[tileArr[tileType]].yOffset
 	cache.x = x
 	cache.y = y
 	return cache
@@ -117,4 +129,12 @@ function love.mousepressed(x, y, button, istouch)
 			level_controller:save(level)
 		end
 	end
+end
+
+function love.keypressed(key, unicode)
+    if editing then
+    	if tonumber(key) ~= nil then
+    		tileSelect = tonumber(key)
+    	end
+   	end
 end

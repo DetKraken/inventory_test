@@ -37,7 +37,7 @@ function player_controller:init(x,y)
 		if player.inventory[object] ~= 0 then
 			player.inventory[object].x = player.x
 			player.inventory[object].y = player.y
-			table.insert(objectArr,player.inventory[object])
+			table.insert(objectArr.active,player.inventory[object])
 			player.inventory[object] = 0
 		end
 	end
@@ -56,14 +56,21 @@ function player_controller:init(x,y)
 end
 
 function player_controller:draw(player)
-	--love.graphics.print(player.cCooldown, player.x, player.y+50)
-	--love.graphics.print(playerPickup, player.x, player.y-30)
-	--love.graphics.print(tostring(player.inventory[1]).."/"..tostring(player.inventory[2]), player.x, player.y+30)
 	love.graphics.draw(player.sprite, player.x+14, player.y+14, player.r, 1 ,1, 14,14)
+	if player.inventory[player.equipped] ~= 0 then
+		love.graphics.draw(player.inventory[player.equipped].sprite, player.inventory[player.equipped].x, player.inventory[player.equipped].y, player.r, 1, 1, 1, 1, kx, ky)
+	end
 end
 
 function player_controller:update(player,dt,objArr,level,mX,mY)
-	player.r = math.atan2(mX - player.x, player.y - mY ) - math.pi / 2
+	for _,v in pairs(player.inventory) do
+		if v ~= 0 then
+			v.x = player.x + 14
+			v.y = player.y + 14
+			v.r = player.r
+		end
+	end
+	player.r = math.atan2(mX - (player.x + 14), (player.y + 14) - mY ) - math.pi / 2
 	playerPickup = ""
 	if player.cCooldown > 0 then
 		player.cCooldown = player.cCooldown - 1 * dt
@@ -101,12 +108,12 @@ function playerMove(player,dt)
 end
 
 function playerCollision(player,objArr,level)
-	for i,v in ipairs(objArr) do
+	for i,v in ipairs(objArr.active) do
 		if checkCollision(v.x,v.y,v.w,v.h, player.x,player.y,player.w,player.h) then
 			playerPickup = v.name
 			if love.keyboard.isDown("e") then
 				if pickup(v) then
-					table.remove(objArr,i)
+					table.remove(objArr.active,i)
 				end
 			end
 		end
@@ -114,28 +121,28 @@ function playerCollision(player,objArr,level)
 
 	for _,v in pairs(level) do
 		if v.collision then
-			if checkCollision(v.x,v.y,32,32, player.x,player.y+1,player.w,player.h) and player.yVel > 0 then
+			if checkCollision(v.x+v.xOffset,v.y+v.yOffset,v.w,v.h, player.x,player.y+1,player.w,player.h) and player.yVel > 0 then
 				player.yVel = 0
 				player.collision.north = true
 				player.y = player.y - 1
 			else
 				player.collision.north = false
 			end
-			if checkCollision(v.x,v.y,32,32, player.x,player.y-1,player.w,player.h) and player.yVel < 0 then
+			if checkCollision(v.x+v.xOffset,v.y+v.yOffset,v.w,v.h, player.x,player.y-1,player.w,player.h) and player.yVel < 0 then
 				player.yVel = 0
 				player.collision.south = true
 				player.y = player.y + 1
 			else
 				player.collision.south = false
 			end
-			if checkCollision(v.x,v.y,32,32, player.x+1,player.y,player.w,player.h) then
+			if checkCollision(v.x+v.xOffset,v.y+v.yOffset,v.w,v.h, player.x+1,player.y,player.w,player.h) then
 				player.xVel = 0
 				player.collision.east = true
 				player.x = player.x - 1
 			else
 				player.collision.east = false
 			end
-			if checkCollision(v.x,v.y,32,32, player.x-1,player.y,player.w,player.h) then
+			if checkCollision(v.x+v.xOffset,v.y+v.yOffset,v.w,v.h, player.x-1,player.y,player.w,player.h) then
 				player.xVel = 0
 				player.collision.west = true
 				player.x = player.x + 1

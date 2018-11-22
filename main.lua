@@ -6,12 +6,15 @@ require('src/essentials')
 require('src/level')
 
 function love.load()
+	love.graphics.setBackgroundColor(255,255,255)
 	player = player_controller:init(200,200)
-	--level = level_controller:init(10,10,Tile:new("grass"))
-	level = level_controller:load("level 1.txt")
+	--level = level_controller:init(10,10,Tile:new("floor"))
+	level = level_controller:load("level 2.txt")
 	objectArr = {}
-	table.insert(objectArr,Weapon:new(100,300,"shotgun"))
-	table.insert(objectArr,Weapon:new(300,100,"revolver"))
+	objectArr.active = {}
+	objectArr.bullets = {}
+	--table.insert(objectArr.active,Weapon:new(100,300,"shotgun"))
+	--table.insert(objectArr.active,Weapon:new(300,100,"revolver"))
 end
 
 function love.update(dt)
@@ -22,8 +25,8 @@ end
 
 function love.draw()
 	level_controller:draw(level)
-	for _,v in pairs(objectArr) do
-		love.graphics.draw(v.sprite, v.x, v.y)
+	for _,v in pairs(objectArr.active) do
+		love.graphics.draw(v.sprite, v.x, v.y, v.r)
 	end
 	player_controller:draw(player)
 end
